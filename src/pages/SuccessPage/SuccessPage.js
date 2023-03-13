@@ -1,31 +1,52 @@
 import styled from "styled-components"
+import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 
-export default function SuccessPage() {
+export default function SuccessPage({ reserva, setSucesso }) {
+
+    useEffect(() => {
+        const url = "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many";
+        const promise = axios.post(url, reserva.reservar);
+
+        promise.then(() => setSucesso(true));
+        promise.catch(() => setSucesso(false));
+    });
 
     return (
         <PageContainer>
             <h1>Pedido feito <br /> com sucesso!</h1>
 
-            <TextContainer>
+            <TextContainer data-test="movie-info">
                 <strong><p>Filme e sessão</p></strong>
-                <p>Tudo em todo lugar ao mesmo tempo</p>
-                <p>03/03/2023 - 14:00</p>
+                <p>{reserva.title}</p>
+                <p>{`${reserva.diaSessao} - ${reserva.horaSessao}`}</p>
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="seats-info">
                 <strong><p>Ingressos</p></strong>
-                <p>Assento 01</p>
-                <p>Assento 02</p>
-                <p>Assento 03</p>
+                {reserva.numAssentos
+                    .sort((a, b) => a - b)
+                    .map(numeroAssento =>
+                         <p key={numeroAssento}>Assento {numeroAssento}</p>
+                         )
+                }
             </TextContainer>
 
-            <TextContainer>
-                <strong><p>Comprador</p></strong>
-                <p>Nome: Letícia Chijo</p>
-                <p>CPF: 123.456.789-10</p>
-            </TextContainer>
+            <>
+                {reserva.reserved.comprador.map(({ nome, cpf }) => (
+                    <TextContainer data-test="client-info">
+                        <strong><p>Comprador</p></strong>
+                        <p>Nome: {nome}</p>
+                        <p>CPF: {cpf}</p>
+                    </TextContainer>
+                    ))
+                }
+            </>
 
-            <button>Voltar para Home</button>
+            <Link to="/">
+                <button data-test="go-home-btn">Voltar para Home</button>
+            </Link>
         </PageContainer>
     )
 }
