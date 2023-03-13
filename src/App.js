@@ -13,8 +13,6 @@ export default function App() {
     const [reserva, setReserva] = useState({
         seat: [], name: '', cpf: '', movie: '', day: '', section: ''
     });
-    const [sucesso, setSucesso] = useState(false);
-    //const [assentoSelecionado, setAssentoSelecionado] = useState([]);
 
     return (
         <BrowserRouter>
@@ -24,7 +22,7 @@ export default function App() {
                 <Route path="/" element={<HomePage />}/>
                 <Route path="/sessoes/:idFilme" element={<SessionsPage sessoes={sessoes} setSessoes={setSessoes} /> }/>
                 <Route path="/assentos/:idSessao" element={<SeatsPage assentos={assentos} setAssentos={setAssentos} sessoes={sessoes} reserva={reserva} setReserva={setReserva} />}/>
-                <Route path="/sucesso" element={<SuccessPage assentos={assentos} reserva={reserva} setSucesso={setSucesso} />}/>
+                <Route path="/sucesso" element={<SuccessPage assentos={assentos} reserva={reserva} />}/>
             </Routes>
             
         </BrowserRouter>

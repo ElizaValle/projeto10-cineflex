@@ -3,14 +3,18 @@ import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 
-export default function SuccessPage({ reserva, setSucesso }) {
+export default function SuccessPage({ reserva }) {
+    
+    function sucesso() {
+        return false;
+    }
 
     useEffect(() => {
         const url = "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many";
         const promise = axios.post(url, reserva.reservar);
 
-        promise.then(() => setSucesso(true));
-        promise.catch(() => setSucesso(false));
+        promise.then(() => sucesso(true));
+        promise.catch(() => sucesso(false));
     });
 
     return (
@@ -35,7 +39,7 @@ export default function SuccessPage({ reserva, setSucesso }) {
 
             <>
                 {reserva.reserved.comprador.map(({ nome, cpf }) => (
-                    <TextContainer data-test="client-info">
+                    <TextContainer data-test="client-info" key={cpf}>
                         <strong><p>Comprador</p></strong>
                         <p>Nome: {nome}</p>
                         <p>CPF: {cpf}</p>

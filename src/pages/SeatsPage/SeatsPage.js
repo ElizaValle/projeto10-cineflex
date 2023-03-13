@@ -8,6 +8,8 @@ export default function SeatsPage({ reserva, setReserva }) {
     const [idAssentos, setIdAssentos] = useState([]);
     const [numerosAssentos, setNumerosAssentos] = useState([]);
     const [comprador, setComprador] = useState([]);
+    const [nomeComprador, setNomeComprador] = useState('');
+    const [cpfComprador, setCpfComprador] = useState('');
 
     const { idSessao } = useParams();
 
@@ -68,7 +70,7 @@ export default function SeatsPage({ reserva, setReserva }) {
                 const deletarAssento = comprador.filter(c => c.idSeat !== idAssento);
                 setComprador(deletarAssento);
             }
-            const removerAssento = setIdAssentos.filter(s => s !== idAssento);
+            const removerAssento = idAssentos.filter(s => s !== idAssento);
             const removeNumeroAssento = numerosAssentos.filter(s => s !== numAssento);
             setIdAssentos(removerAssento);
             setNumerosAssentos(removeNumeroAssento);
@@ -81,7 +83,7 @@ export default function SeatsPage({ reserva, setReserva }) {
             Selecione o(s) assento(s)
             
             <SeatsContainer>
-                {sessaoFilme.seats.map(({ id, name, isAvailable }) => (
+                {sessaoFilme && sessaoFilme.seats && sessaoFilme.seats.map(({ id, name, isAvailable }) => (
                     <SeatItem
                         key={id}
                         isAvailable={isAvailable}
@@ -114,23 +116,25 @@ export default function SeatsPage({ reserva, setReserva }) {
 
             <FormContainer onSubmit={enviarAssento}>
                 <label htmlFor="name">Nome do comprador:</label>
-                <input 
+                <input
+                    key={reserva.name} 
                     type="text" 
-                    name={reserva.name}
+                    name={nomeComprador}
                     placeholder="Digite seu nome..." 
-                    value={reserva.name}
-                    onChange={e => setReserva(e.target.value)} 
+                    value={nomeComprador}
+                    onChange={e => setNomeComprador(e.target.value)} 
                     data-test="client-name"
                     required
                 />
 
                 <label htmlFor="name">CPF do comprador:</label>
                 <input
+                    key={reserva.cpf}
                     type="number"
-                    name={reserva.cpf}
+                    name={cpfComprador}
                     placeholder="Digite seu CPF"
-                    value={reserva.cpf}
-                    onChange={e => setReserva(e.target.value)}
+                    value={cpfComprador}
+                    onChange={e => setCpfComprador(e.target.value)}
                     data-test="book-seat-btn"
                     required
                 />
@@ -141,11 +145,17 @@ export default function SeatsPage({ reserva, setReserva }) {
 
             <FooterContainer data-test="footer">
                 <div>
-                    <img src={sessaoFilme.movie.posterURL} alt={sessaoFilme.movie.title} />
+                    {sessaoFilme && sessaoFilme.movie && (
+                        <img src={sessaoFilme.movie.posterURL} alt={sessaoFilme.movie.title} />
+                    )}
                 </div>
                 <div>
-                    <p>{sessaoFilme.movie.title}</p>
-                    <p>{`${sessaoFilme.day.weekday} - ${sessaoFilme.name}`}</p>
+                    {sessaoFilme && sessaoFilme.movie && (
+                        <p>{sessaoFilme.movie.title}</p>
+                    )}
+                    {sessaoFilme && sessaoFilme.day && (
+                        <p>{`${sessaoFilme.day.weekday} - ${sessaoFilme.name}`}</p>
+                    )}
                 </div>
             </FooterContainer>
 
